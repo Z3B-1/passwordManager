@@ -51,6 +51,26 @@ def load_passwords(key):
                 passwords.append((service, username, password))
     return passwords
 
+def remove_password(passwords, key):
+    new_passwords = [] 
+    service_name = input("Inserisci il nome del servizio da Elliminare: ")
+    last_request = input(Fore.RED + f"Elliminare {service_name} ?")
+
+    if last_request in ["si", "sì", "s", "y", "yes"]:
+        for service, username, password in passwords:
+            if(service_name != service):
+                new_passwords.append((service, username, password))
+                save_passwords(new_passwords, key)
+        print(Fore.YELLOW + f"\nServizio Elliminato: {service_name}")
+        # Attendi l'invio prima di tornare al menu
+        input("Premi Invio per tornare al menu principale...")
+    elif last_request in ["n", "no"]:
+        print(Fore.YELLOW + f"\nServizio NON Elliminato")
+        input("Premi Invio per tornare al menu principale...")
+    else:
+        print(Fore.YELLOW + f"\nServizio NON Elliminato")
+        input("Premi Invio per tornare al menu principale...")
+    
 def add_password(passwords, key):
     service = input("Inserisci il nome del servizio: ")
     username = input("Inserisci il nome utente: ")
@@ -119,8 +139,9 @@ def main():
         print("2. Visualizza la password di un servizio")
         print("3. Cambia la password di un servizio")
         print("4. Visualizza la lista dei servizi salvati")
-        print("5. Esci")
-        choice = input("Scegli un'opzione (1/2/3/4/5): ").strip()
+        print("5. Rimuovi un servizio")
+        print("6. Esci")
+        choice = input("Scegli un'opzione (1/2/3/4/5/6): ").strip()
 
         if choice == "1":
             add_password(passwords, key)
@@ -131,6 +152,10 @@ def main():
         elif choice == "4":
             list_services(passwords)
         elif choice == "5":
+            print(Fore.CYAN + "Rimuovi un servizio")
+            remove_password(passwords, key)
+            passwords = load_passwords(key)
+        elif choice == "6":
             print(Fore.CYAN + "Arrivederci!")
             break
         else:
